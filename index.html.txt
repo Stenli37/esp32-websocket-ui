@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Control</title>
+</head>
+<body>
+    <h2>Control ESP32</h2>
+    <label for="state">Select State:</label>
+    <select id="state">
+        <option value="1">Turn On</option>
+        <option value="0">Turn Off</option>
+    </select>
+    <button onclick="sendCommand()">Set</button>
+
+    <script>
+        const ws = new WebSocket("ws://YOUR_ESP32_IP:80"); // Connect to ESP32 WebSocket server
+
+        function sendCommand() {
+            const state = document.getElementById("state").value;
+            ws.send(state);
+        }
+    </script>
+</body>
+</html>
