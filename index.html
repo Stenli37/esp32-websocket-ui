@@ -18,7 +18,7 @@
         let ws;  // Define WebSocket variable in global scope
         
         window.onload = function() {
-            ws = new WebSocket("wss://192.168.1.114:80"); // Replace with ESP32 IP
+            ws = new WebSocket("ws://192.168.1.114:80"); // Replace with ESP32 IP
 
             ws.onopen = function() {
                 console.log("WebSocket connected!");
