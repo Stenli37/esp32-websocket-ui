@@ -12,13 +12,13 @@
         <option value="1">Turn On</option>
         <option value="0">Turn Off</option>
     </select>
-    <button onclick="sendCommand()">Set</button>
+    <button id="setButton">Set</button>
 
     <script>
-        let ws; // Declare WebSocket variable once
+        let ws;  // Define WebSocket variable in global scope
         
         window.onload = function() {
-            ws = new WebSocket("ws://192.168.1.114:80"); // Replace with your ESP32 IP
+            ws = new WebSocket("ws://192.168.1.114:80"); // Replace with ESP32 IP
 
             ws.onopen = function() {
                 console.log("WebSocket connected!");
@@ -27,15 +27,26 @@
             ws.onerror = function(error) {
                 console.error("WebSocket error:", error);
             };
+
+            ws.onmessage = function(event) {
+                console.log("Message from ESP32:", event.data);
+            };
+
+            ws.onclose = function() {
+                console.log("WebSocket closed!");
+            };
+
+            // Add event listener to button AFTER WebSocket is initialized
+            document.getElementById("setButton").addEventListener("click", sendCommand);
         };
 
         function sendCommand() {
-            if (ws && ws.readyState === WebSocket.OPEN) { // Ensure WebSocket is open before sending
+            if (ws && ws.readyState === WebSocket.OPEN) { // Ensure WebSocket is open
                 const state = document.getElementById("state").value;
                 ws.send(state);
                 console.log("Sent command:", state);
             } else {
-                console.error("WebSocket not connected!");
+                console.error("WebSocket not connected yet!");
             }
         }
     </script>
