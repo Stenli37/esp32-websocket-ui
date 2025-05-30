@@ -15,11 +15,28 @@
     <button onclick="sendCommand()">Set</button>
 
     <script>
-        const ws = new WebSocket("ws://192.168.1.114:80"); // Connect to ESP32 WebSocket server
+        let ws; // Declare WebSocket variable once
+        
+        window.onload = function() {
+            ws = new WebSocket("ws://192.168.1.114:80"); // Replace with your ESP32 IP
+
+            ws.onopen = function() {
+                console.log("WebSocket connected!");
+            };
+
+            ws.onerror = function(error) {
+                console.error("WebSocket error:", error);
+            };
+        };
 
         function sendCommand() {
-            const state = document.getElementById("state").value;
-            ws.send(state);
+            if (ws && ws.readyState === WebSocket.OPEN) { // Ensure WebSocket is open before sending
+                const state = document.getElementById("state").value;
+                ws.send(state);
+                console.log("Sent command:", state);
+            } else {
+                console.error("WebSocket not connected!");
+            }
         }
     </script>
 </body>
